@@ -1,4 +1,3 @@
-      
 -- tạo cơ sở dữ liệu
 create database online_learning;
 use online_learning;
