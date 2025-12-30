@@ -5,8 +5,8 @@ USE school;
 CREATE TABLE Student (
     student_id INT PRIMARY KEY,
     full_name  VARCHAR(100) NOT NULL,
-    email      VARCHAR(100) NOT NULL UNIQUE,
-    phone      VARCHAR(20)  NOT NULL UNIQUE
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(20)  NOT NULL UNIQUE
 );
 
 -- Bảng Course
@@ -19,7 +19,7 @@ CREATE TABLE Course (
 -- Bảng Enrollment
 CREATE TABLE Enrollment (
     student_id INT,
-    course_id  INT,
+    course_id INT,
     grade DECIMAL(4,2) DEFAULT 0,
 
     PRIMARY KEY (student_id, course_id),
