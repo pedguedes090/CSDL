@@ -106,52 +106,42 @@ group by g.guest_id, g.guest_name
 order by booking_count desc, g.guest_id;
 
 -- câu 3
-SELECT r.room_id, r.room_type,
-       COUNT(*) * r.price_per_day AS doanh_thu
-FROM rooms r
-JOIN bookings b ON r.room_id = b.room_id
-GROUP BY r.room_id, r.room_type, r.price_per_day;
+select r.room_id, r.room_type,
+       COUNT(*) * r.price_per_day doanh_thu
+from rooms r
+join bookings b on r.room_id = b.room_id
+group by r.room_id, r.room_type, r.price_per_day;
 
 -- Câu 4
-SELECT guest_name, COUNT(*) AS total_bookings
-FROM guests g
-JOIN bookings b ON g.guest_id = b.guest_id
-GROUP BY g.guest_name
-HAVING COUNT(*) >= 2;
+select guest_name, COUNT(*) total_bookings
+from guests g
+join bookings b on g.guest_id = b.guest_id
+group by g.guest_name
+having COUNT(*) >= 2;
 
 -- Câu 5
-SELECT r.room_type, COUNT(*) AS total_bookings
-FROM bookings b
-JOIN rooms r ON b.room_id = r.room_id
-GROUP BY r.room_type
-ORDER BY total_bookings DESC
-LIMIT 1;
+select r.room_type, COUNT(*) total_bookings
+from bookings b
+join rooms r on b.room_id = r.room_id
+group by r.room_type
+order by total_bookings desc
+limit 1;
 
 
 -- Phần 3
 -- câu 1
-SELECT room_id, room_type, price_per_day
-FROM rooms
-WHERE price_per_day > (SELECT AVG(price_per_day) FROM rooms)
-ORDER BY price_per_day DESC, room_id;
+select room_id, room_type, price_per_day
+from rooms
+where price_per_day > (select avg(price_per_day) from rooms)
+order by price_per_day desc, room_id;
 
 -- câu 2
-SELECT g.guest_id, g.guest_name, g.phone
-FROM guests g
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM bookings b
-    WHERE b.guest_id = g.guest_id
+select g.guest_id, g.guest_name, g.phone
+from guests g
+where not exists (
+    select 1
+    from bookings b
+    where b.guest_id = g.guest_id
 )
-ORDER BY g.guest_id;
+order by g.guest_id;
 
--- câu 3
-WITH room_counts AS (
-    SELECT r.room_id, r.room_type, r.price_per_day, COUNT(b.booking_id) AS cnt
-    FROM rooms r
-    LEFT JOIN bookings b ON b.room_id = r.room_id
-    GROUP BY r.room_id, r.room_type, r.price_per_day
-)
-SELECT room_id, room_type, price_per_day, cnt
-FROM room_counts
-WHERE cnt = (SELECT MAX(cnt) FROM room_counts);
